@@ -1,17 +1,22 @@
 package com.ics115.project;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.ValueEventListener;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.w3c.dom.Text;
 
@@ -22,7 +27,9 @@ public class SeatReservationActivity extends AppCompatActivity {
 
     private Spinner spinner2;
     private Button btnReserve;
-
+    DatabaseReference myRef;
+    FirebaseDatabase database;
+    ImageView imageViewSeat1;
 //    Intent b = getIntent();
 //    String id = b.getStringExtra("id");
 //    TextView txtViewSet = (TextView) findViewById(R.id.txtViewSet);
@@ -32,6 +39,10 @@ public class SeatReservationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seat_reservation);
 //        txtViewSet.setText(id);
+        imageViewSeat1 = findViewById(R.id.imageViewSeat1);
+
+        database = FirebaseDatabase.getInstance();
+
             addItemsOnSpinner2();
             addListenerOnButton();
     }
@@ -56,10 +67,43 @@ public class SeatReservationActivity extends AppCompatActivity {
         spinner2 = (Spinner) findViewById(R.id.spinner2);
         btnReserve = (Button) findViewById(R.id.btnReserve);
 
+        imageViewSeat1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myRef = database.getReference(String.valueOf(spinner2.getSelectedItem()));
+                myRef.addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull com.google.firebase.database.DataSnapshot dataSnapshot) {
+                        Boolean value = dataSnapshot.child("Seat 1").getValue(Boolean.class);
+                        String status;
+                        if(value.equals(false)){
+                            dataSnapshot.child("Seat 1").getRef().setValue(true);
+
+
+                        }else if(value.equals(true)){
+                            dataSnapshot.child("Seat 1").getRef().setValue(false);
+
+                        }
+                        if(value.equals(true)){
+                            status = "vacant";
+                        }else{
+                            status = "reserved";
+                        }
+                        Toast.makeText(SeatReservationActivity.this, "Seat 1 is " + status, Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        });
         btnReserve.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
+
 
                 Toast.makeText(SeatReservationActivity.this,
                                 "\nYou've selected: "+ String.valueOf(spinner2.getSelectedItem()),
