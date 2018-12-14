@@ -42,7 +42,7 @@
     <string name="txtViewSixth">5:00PM to 7:00PM</string>
     <string name="btnPrev">PREVIOUS</string>
 
-    <!--Seat Reservation-->
+    <!--Seat Reservation Page-->
     <string name="txtViewPls">Please choose your desired seat/s:</string>
     <string name="solaire_prompt">Choose a time:</string>
     <string-array name="solaire_dest">
@@ -53,4 +53,13 @@
     </string-array>
     <string name="txtViewNum">Number of reserved seat/s:</string>
     <string name="btnReserve">RESERVE</string>
+
+    <!--Reserved Seats Page-->
+    <string name="txtViewGreat">Great! You have just reserved</string>
+    <string name="txtViewSeats">your seat/s. Here are the details of</string>
+    <string name="txtViewRes">your reservation.</string>
+    <string name="txtViewBN">Booking Number:</string>
+    <string name="txtViewRN">Reservation Name:</string>
+    <string name="txtViewT">Time:</string>
+    <string name="btnHome">BACK TO HOME</string>
 </resources>

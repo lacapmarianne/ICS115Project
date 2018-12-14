@@ -20,7 +20,8 @@
         <activity android:name=".WelcomePageActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".CheckScheduleActivity" />
-        <activity android:name=".CheckScheduleNextActivity"></activity>
+        <activity android:name=".CheckScheduleNextActivity" />
+        <activity android:name=".ReservedSeatsActivity"></activity>
     </application>
 
 </manifest>
