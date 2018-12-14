@@ -1,0 +1,56 @@
+<resources>
+    <string name="app_name">ICS115Project</string>
+
+    <!--Log-In Page-->
+    <string name="txtResName">Reservation Name</string>
+    <string name="txtBookNum">Booking Number</string>
+    <string name="logo">solaireLogo</string>
+    <string name="inputResName">Enter Reservation Name</string>
+    <string name="inputBookNum">Enter Booking Number</string>
+    <string name="btnSignIn">SIGN IN</string>
+
+    <!--Log-In Failed Page-->
+    <string name="txtViewHop">Hop and Drop... could not Sign In</string>
+    <string name="txtViewYour">Your Reservation Name and Booking Number</string>
+    <string name="txtViewMatch">does not match. Please try again.</string>
+    <string name="btnTryAgain">TRY AGAIN</string>
+
+    <!--Welcome Page-->
+    <string name="txtViewDate">Date</string>
+    <string name="btnCheckSched">CHECK SCHEDULE</string>
+
+    <!--Check Schedule Page-->
+    <string name="txtViewServiceSched">Shuttle Service Schedule</string>
+    <string name="txtViewWeekdaySched">WEEKDAYS:</string>
+    <string name="txtViewMon">(Monday-Friday)</string>
+    <string name="btnNext">NEXT</string>
+    <string name="txtViewMOA">MOA</string>
+    <string name="txtViewSolaire">SOLAIRE</string>
+    <string name="txtViewTrinoma">TRINOMA</string>
+    <string name="txtViewGBelt">GREENBELT</string>
+    <string name="txtViewTime">TIME:</string>
+    <string name="txtViewFirst">7:00AM to 9:00AM</string>
+    <string name="txtViewSecond">10:00AM to 12:00NN</string>
+    <string name="txtViewThird">1:00PM to 3:00PM</string>
+    <string name="txtViewFourth">4:00PM to 6:00PM</string>
+    <string name="btnCheckSeats">CHECK SEATS</string>
+
+    <!--Check Schedule Next Page-->
+    <string name="txtViewWE">WEEKENDS:</string>
+    <string name="txtViewSat">(Saturday-Sunday)</string>
+    <string name="txtViewFifth">2:00PM to 4:00PM</string>
+    <string name="txtViewSixth">5:00PM to 7:00PM</string>
+    <string name="btnPrev">PREVIOUS</string>
+
+    <!--Seat Reservation-->
+    <string name="txtViewPls">Please choose your desired seat/s:</string>
+    <string name="solaire_prompt">Choose a time:</string>
+    <string-array name="solaire_dest">
+        <item>7:00AM to 9:00AM</item>
+        <item>10:00AM to 12:00NN</item>
+        <item>1:00PM to 3:00PM</item>
+        <item>4:00PM to 6:00PM</item>
+    </string-array>
+    <string name="txtViewNum">Number of reserved seat/s:</string>
+    <string name="btnReserve">RESERVE</string>
+</resources>
