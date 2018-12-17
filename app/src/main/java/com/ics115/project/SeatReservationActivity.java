@@ -505,7 +505,7 @@ public class SeatReservationActivity extends AppCompatActivity {
         });
 
         //Reservation for Seat 12
-        imageViewSeat10.setOnClickListener(new View.OnClickListener() {
+        imageViewSeat12.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 checkNumOfSeats();
@@ -514,12 +514,12 @@ public class SeatReservationActivity extends AppCompatActivity {
                 myRef.addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull com.google.firebase.database.DataSnapshot dataSnapshot) {
-                        Boolean value = dataSnapshot.child("Seat 10").getValue(Boolean.class);
+                        Boolean value = dataSnapshot.child("Seat 12").getValue(Boolean.class);
                         String status;
                         if(value.equals(false)){
-                            dataSnapshot.child("Seat 10").getRef().setValue(true);
+                            dataSnapshot.child("Seat 12").getRef().setValue(true);
                         }else if(value.equals(true)){
-                            dataSnapshot.child("Seat 10").getRef().setValue(false);
+                            dataSnapshot.child("Seat 12").getRef().setValue(false);
                         }
 
                         if(value.equals(true)){
