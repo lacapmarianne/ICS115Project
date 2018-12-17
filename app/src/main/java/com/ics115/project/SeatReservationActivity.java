@@ -4,16 +4,19 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +25,7 @@ public class SeatReservationActivity extends AppCompatActivity {
 
     private Spinner spinner2;
     private Button btnReserve;
+    private TextView seats;
     String seat_id;
 
     DatabaseReference myRef;
@@ -37,7 +41,7 @@ public class SeatReservationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seat_reservation);
-
+        seats = findViewById(R.id.totalSeats);
         imageViewSeat1 = findViewById(R.id.imageViewSeat1);
         imageViewSeat2 = findViewById(R.id.imageViewSeat2);
         imageViewSeat3 = findViewById(R.id.imageViewSeat3);
@@ -63,6 +67,8 @@ public class SeatReservationActivity extends AppCompatActivity {
 
             addItemsOnSpinner2();
             addListenerOnButton();
+            checkNumOfSeats();
+            showSeats();
     }
 
     // Add items into spinner dynamically
@@ -85,10 +91,25 @@ public class SeatReservationActivity extends AppCompatActivity {
         spinner2 = (Spinner) findViewById(R.id.spinner2);
         btnReserve = (Button) findViewById(R.id.btnReserve);
 
+        spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                checkNumOfSeats();
+                showSeats();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         //Reservation for Seat 1
         imageViewSeat1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                checkNumOfSeats();
+                showSeats();
                 myRef = database.getReference(String.valueOf(spinner2.getSelectedItem()));
                 myRef.addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
                     @Override
@@ -97,8 +118,11 @@ public class SeatReservationActivity extends AppCompatActivity {
                         String status;
                         if(value.equals(false)){
                             dataSnapshot.child("Seat 1").getRef().setValue(true);
+
+
                         }else if(value.equals(true)){
                             dataSnapshot.child("Seat 1").getRef().setValue(false);
+
                         }
 
                         if(value.equals(true)){
@@ -107,12 +131,7 @@ public class SeatReservationActivity extends AppCompatActivity {
                             status = "reserved";
                         }
 
-                        if(seat_id == "Seat 1") {
-                            imageViewSeat1.setImageResource(R.drawable.seat_black);
-                            seat_id = null;
-                        }else{
-                            imageViewSeat1.setImageResource(R.drawable.seat_orange);
-                        }
+
 
                         Toast.makeText(SeatReservationActivity.this, "Seat 1 is " + status, Toast.LENGTH_SHORT).show();
                     }
@@ -129,6 +148,8 @@ public class SeatReservationActivity extends AppCompatActivity {
         imageViewSeat2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                checkNumOfSeats();
+                showSeats();
                 myRef = database.getReference(String.valueOf(spinner2.getSelectedItem()));
                 myRef.addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
                     @Override
@@ -147,12 +168,6 @@ public class SeatReservationActivity extends AppCompatActivity {
                             status = "reserved";
                         }
 
-                        if(seat_id == "Seat 2") {
-                            imageViewSeat2.setImageResource(R.drawable.seat_black);
-                            seat_id = null;
-                        }else{
-                            imageViewSeat2.setImageResource(R.drawable.seat_orange);
-                        }
                         Toast.makeText(SeatReservationActivity.this, "Seat 2 is " + status, Toast.LENGTH_SHORT).show();
                     }
 
@@ -168,6 +183,8 @@ public class SeatReservationActivity extends AppCompatActivity {
         imageViewSeat3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                checkNumOfSeats();
+                showSeats();
                 myRef = database.getReference(String.valueOf(spinner2.getSelectedItem()));
                 myRef.addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
                     @Override
@@ -188,12 +205,7 @@ public class SeatReservationActivity extends AppCompatActivity {
                             status = "reserved";
                         }
 
-                        if(seat_id == "Seat 3") {
-                            imageViewSeat3.setImageResource(R.drawable.seat_black);
-                            seat_id = null;
-                        } else{
-                            imageViewSeat3.setImageResource(R.drawable.seat_orange);
-                        }
+
                         Toast.makeText(SeatReservationActivity.this, "Seat 3 is " + status, Toast.LENGTH_SHORT).show();
                     }
 
@@ -209,6 +221,8 @@ public class SeatReservationActivity extends AppCompatActivity {
         imageViewSeat4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                checkNumOfSeats();
+                showSeats();
                 myRef = database.getReference(String.valueOf(spinner2.getSelectedItem()));
                 myRef.addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
                     @Override
@@ -227,12 +241,7 @@ public class SeatReservationActivity extends AppCompatActivity {
                             status = "reserved";
                         }
 
-                        if(seat_id == "Seat 4") {
-                            imageViewSeat4.setImageResource(R.drawable.seat_black);
-                            seat_id = null;
-                        } else{
-                            imageViewSeat4.setImageResource(R.drawable.seat_orange);
-                        }
+
                         Toast.makeText(SeatReservationActivity.this, "Seat 4 is " + status, Toast.LENGTH_SHORT).show();
                     }
 
@@ -248,6 +257,8 @@ public class SeatReservationActivity extends AppCompatActivity {
         imageViewSeat5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                checkNumOfSeats();
+                showSeats();
                 myRef = database.getReference(String.valueOf(spinner2.getSelectedItem()));
                 myRef.addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
                     @Override
@@ -266,12 +277,7 @@ public class SeatReservationActivity extends AppCompatActivity {
                             status = "reserved";
                         }
 
-                        if(seat_id == "Seat 5") {
-                            imageViewSeat5.setImageResource(R.drawable.seat_black);
-                            seat_id = null;
-                        } else{
-                            imageViewSeat5.setImageResource(R.drawable.seat_orange);
-                        }
+
                         Toast.makeText(SeatReservationActivity.this, "Seat 5 is " + status, Toast.LENGTH_SHORT).show();
                     }
 
@@ -287,6 +293,8 @@ public class SeatReservationActivity extends AppCompatActivity {
         imageViewSeat6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                checkNumOfSeats();
+                showSeats();
                 myRef = database.getReference(String.valueOf(spinner2.getSelectedItem()));
                 myRef.addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
                     @Override
@@ -305,12 +313,7 @@ public class SeatReservationActivity extends AppCompatActivity {
                             status = "reserved";
                         }
 
-                        if(seat_id == "Seat 6") {
-                            imageViewSeat6.setImageResource(R.drawable.seat_black);
-                            seat_id = null;
-                        } else{
-                            imageViewSeat6.setImageResource(R.drawable.seat_orange);
-                        }
+
                         Toast.makeText(SeatReservationActivity.this,  "Seat 6 is " + status, Toast.LENGTH_SHORT).show();
                     }
 
@@ -326,6 +329,8 @@ public class SeatReservationActivity extends AppCompatActivity {
         imageViewSeat7.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                checkNumOfSeats();
+                showSeats();
                 myRef = database.getReference(String.valueOf(spinner2.getSelectedItem()));
                 myRef.addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
                     @Override
@@ -344,12 +349,7 @@ public class SeatReservationActivity extends AppCompatActivity {
                             status = "reserved";
                         }
 
-                        if(seat_id == "Seat 7") {
-                            imageViewSeat7.setImageResource(R.drawable.seat_black);
-                            seat_id = null;
-                        } else{
-                            imageViewSeat7.setImageResource(R.drawable.seat_orange);
-                        }
+
                         Toast.makeText(SeatReservationActivity.this, "Seat 7 is " + status, Toast.LENGTH_SHORT).show();
                     }
 
@@ -365,6 +365,8 @@ public class SeatReservationActivity extends AppCompatActivity {
         imageViewSeat8.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                checkNumOfSeats();
+                showSeats();
                 myRef = database.getReference(String.valueOf(spinner2.getSelectedItem()));
                 myRef.addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
                     @Override
@@ -383,12 +385,7 @@ public class SeatReservationActivity extends AppCompatActivity {
                             status = "reserved";
                         }
 
-                        if(seat_id == "Seat 8") {
-                            imageViewSeat8.setImageResource(R.drawable.seat_black);
-                            seat_id = null;
-                        } else{
-                            imageViewSeat8.setImageResource(R.drawable.seat_orange);
-                        }
+
                         Toast.makeText(SeatReservationActivity.this, "Seat 8 is " + status, Toast.LENGTH_SHORT).show();
                     }
 
@@ -404,6 +401,8 @@ public class SeatReservationActivity extends AppCompatActivity {
         imageViewSeat9.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                checkNumOfSeats();
+                showSeats();
                 myRef = database.getReference(String.valueOf(spinner2.getSelectedItem()));
                 myRef.addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
                     @Override
@@ -421,12 +420,7 @@ public class SeatReservationActivity extends AppCompatActivity {
                         }else{
                             status = "reserved";
                         }
-                        if(seat_id == "Seat 9") {
-                            imageViewSeat9.setImageResource(R.drawable.seat_black);
-                            seat_id = null;
-                        } else{
-                            imageViewSeat9.setImageResource(R.drawable.seat_orange);
-                        }
+
                         Toast.makeText(SeatReservationActivity.this, "Seat 9 is " + status, Toast.LENGTH_SHORT).show();
                     }
 
@@ -442,6 +436,8 @@ public class SeatReservationActivity extends AppCompatActivity {
         imageViewSeat10.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                checkNumOfSeats();
+                showSeats();
                 myRef = database.getReference(String.valueOf(spinner2.getSelectedItem()));
                 myRef.addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
                     @Override
@@ -460,12 +456,7 @@ public class SeatReservationActivity extends AppCompatActivity {
                             status = "reserved";
                         }
 
-                        if(seat_id == "Seat 10") {
-                            imageViewSeat10.setImageResource(R.drawable.seat_black);
-                            seat_id = null;
-                        } else{
-                            imageViewSeat10.setImageResource(R.drawable.seat_orange);
-                        }
+
                         Toast.makeText(SeatReservationActivity.this, "Seat 10 is " + status, Toast.LENGTH_SHORT).show();
                     }
 
@@ -481,6 +472,8 @@ public class SeatReservationActivity extends AppCompatActivity {
         imageViewSeat11.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                checkNumOfSeats();
+                showSeats();
                 myRef = database.getReference(String.valueOf(spinner2.getSelectedItem()));
                 myRef.addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
                     @Override
@@ -499,12 +492,7 @@ public class SeatReservationActivity extends AppCompatActivity {
                             status = "reserved";
                         }
 
-                        if(seat_id == "Seat 11") {
-                            imageViewSeat11.setImageResource(R.drawable.seat_black);
-                            seat_id = null;
-                        } else{
-                            imageViewSeat11.setImageResource(R.drawable.seat_orange);
-                        }
+
                         Toast.makeText(SeatReservationActivity.this, "Seat 11 is " + status, Toast.LENGTH_SHORT).show();
                     }
 
@@ -520,6 +508,8 @@ public class SeatReservationActivity extends AppCompatActivity {
         imageViewSeat10.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                checkNumOfSeats();
+                showSeats();
                 myRef = database.getReference(String.valueOf(spinner2.getSelectedItem()));
                 myRef.addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
                     @Override
@@ -538,12 +528,7 @@ public class SeatReservationActivity extends AppCompatActivity {
                             status = "reserved";
                         }
 
-                        if(seat_id == "Seat 12") {
-                            imageViewSeat12.setImageResource(R.drawable.seat_black);
-                            seat_id = null;
-                        } else{
-                            imageViewSeat12.setImageResource(R.drawable.seat_orange);
-                        }
+
                         Toast.makeText(SeatReservationActivity.this, "Seat 12 is " + status, Toast.LENGTH_SHORT).show();
                     }
 
@@ -559,6 +544,8 @@ public class SeatReservationActivity extends AppCompatActivity {
         imageViewSeat13.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                checkNumOfSeats();
+                showSeats();
                 myRef = database.getReference(String.valueOf(spinner2.getSelectedItem()));
                 myRef.addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
                     @Override
@@ -577,12 +564,7 @@ public class SeatReservationActivity extends AppCompatActivity {
                             status = "reserved";
                         }
 
-                        if(seat_id == "Seat 13") {
-                            imageViewSeat13.setImageResource(R.drawable.seat_black);
-                            seat_id = null;
-                        } else{
-                            imageViewSeat13.setImageResource(R.drawable.seat_orange);
-                        }
+
                         Toast.makeText(SeatReservationActivity.this, "Seat 13 is " + status, Toast.LENGTH_SHORT).show();
                     }
 
@@ -598,6 +580,8 @@ public class SeatReservationActivity extends AppCompatActivity {
         imageViewSeat14.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                checkNumOfSeats();
+                showSeats();
                 myRef = database.getReference(String.valueOf(spinner2.getSelectedItem()));
                 myRef.addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
                     @Override
@@ -616,12 +600,7 @@ public class SeatReservationActivity extends AppCompatActivity {
                             status = "reserved";
                         }
 
-                        if(seat_id == "Seat 14") {
-                            imageViewSeat14.setImageResource(R.drawable.seat_black);
-                            seat_id = null;
-                        } else{
-                            imageViewSeat14.setImageResource(R.drawable.seat_orange);
-                        }
+
                         Toast.makeText(SeatReservationActivity.this, "Seat 14 is " + status, Toast.LENGTH_SHORT).show();
                     }
 
@@ -637,6 +616,8 @@ public class SeatReservationActivity extends AppCompatActivity {
         imageViewSeat15.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                checkNumOfSeats();
+                showSeats();
                 myRef = database.getReference(String.valueOf(spinner2.getSelectedItem()));
                 myRef.addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
                     @Override
@@ -655,12 +636,7 @@ public class SeatReservationActivity extends AppCompatActivity {
                             status = "reserved";
                         }
 
-                        if(seat_id == "Seat 15") {
-                            imageViewSeat15.setImageResource(R.drawable.seat_black);
-                            seat_id = null;
-                        } else{
-                            imageViewSeat15.setImageResource(R.drawable.seat_orange);
-                        }
+
                         Toast.makeText(SeatReservationActivity.this,  "Seat 15 is " + status, Toast.LENGTH_SHORT).show();
                     }
 
@@ -676,6 +652,8 @@ public class SeatReservationActivity extends AppCompatActivity {
         imageViewSeat16.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                checkNumOfSeats();
+                showSeats();
                 myRef = database.getReference(String.valueOf(spinner2.getSelectedItem()));
                 myRef.addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
                     @Override
@@ -694,12 +672,7 @@ public class SeatReservationActivity extends AppCompatActivity {
                             status = "reserved";
                         }
 
-                        if(seat_id == "Seat 16") {
-                            imageViewSeat16.setImageResource(R.drawable.seat_black);
-                            seat_id = null;
-                        } else{
-                            imageViewSeat16.setImageResource(R.drawable.seat_orange);
-                        }
+
                         Toast.makeText(SeatReservationActivity.this, "Seat 16 is " + status, Toast.LENGTH_SHORT).show();
                     }
 
@@ -715,6 +688,8 @@ public class SeatReservationActivity extends AppCompatActivity {
         imageViewSeat17.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                checkNumOfSeats();
+                showSeats();
                 myRef = database.getReference(String.valueOf(spinner2.getSelectedItem()));
                 myRef.addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
                     @Override
@@ -733,12 +708,7 @@ public class SeatReservationActivity extends AppCompatActivity {
                             status = "reserved";
                         }
 
-                        if(seat_id == "Seat 17") {
-                            imageViewSeat17.setImageResource(R.drawable.seat_black);
-                            seat_id = null;
-                        } else{
-                            imageViewSeat17.setImageResource(R.drawable.seat_orange);
-                        }
+
                         Toast.makeText(SeatReservationActivity.this, "Seat 17 is " + status, Toast.LENGTH_SHORT).show();
                     }
 
@@ -754,6 +724,8 @@ public class SeatReservationActivity extends AppCompatActivity {
         imageViewSeat18.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                checkNumOfSeats();
+                showSeats();
                 myRef = database.getReference(String.valueOf(spinner2.getSelectedItem()));
                 myRef.addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
                     @Override
@@ -772,12 +744,7 @@ public class SeatReservationActivity extends AppCompatActivity {
                             status = "reserved";
                         }
 
-                        if(seat_id == "Seat 18") {
-                            imageViewSeat18.setImageResource(R.drawable.seat_black);
-                            seat_id = null;
-                        } else{
-                            imageViewSeat18.setImageResource(R.drawable.seat_orange);
-                        }
+
                         Toast.makeText(SeatReservationActivity.this, "Seat 18 is " + status, Toast.LENGTH_SHORT).show();
                     }
 
@@ -793,6 +760,8 @@ public class SeatReservationActivity extends AppCompatActivity {
         imageViewSeat19.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                checkNumOfSeats();
+                showSeats();
                 myRef = database.getReference(String.valueOf(spinner2.getSelectedItem()));
                 myRef.addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
                     @Override
@@ -811,12 +780,7 @@ public class SeatReservationActivity extends AppCompatActivity {
                             status = "reserved";
                         }
 
-                        if(seat_id == "Seat 19") {
-                            imageViewSeat19.setImageResource(R.drawable.seat_black);
-                            seat_id = null;
-                        } else{
-                            imageViewSeat19.setImageResource(R.drawable.seat_orange);
-                        }
+
                         Toast.makeText(SeatReservationActivity.this, "Seat 19 is " + status, Toast.LENGTH_SHORT).show();
                     }
 
@@ -832,6 +796,8 @@ public class SeatReservationActivity extends AppCompatActivity {
         imageViewSeat20.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                checkNumOfSeats();
+                showSeats();
                 myRef = database.getReference(String.valueOf(spinner2.getSelectedItem()));
                 myRef.addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
                     @Override
@@ -850,12 +816,7 @@ public class SeatReservationActivity extends AppCompatActivity {
                             status = "reserved";
                         }
 
-                        if(seat_id == "Seat 20") {
-                            imageViewSeat20.setImageResource(R.drawable.seat_black);
-                            seat_id = null;
-                        } else{
-                            imageViewSeat20.setImageResource(R.drawable.seat_orange);
-                        }
+
                         Toast.makeText(SeatReservationActivity.this, "Seat 20 is " + status, Toast.LENGTH_SHORT).show();
                     }
 
@@ -878,6 +839,411 @@ public class SeatReservationActivity extends AppCompatActivity {
                                 Toast.LENGTH_SHORT).show();
             }
 
+        });
+    }
+    public void checkNumOfSeats(){
+
+        myRef = database.getReference(String.valueOf(spinner2.getSelectedItem()));
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int counter = 0;
+
+                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                    if(ds.getValue().equals(true)){
+                        counter = counter + 1;
+                    }
+                }
+                seats.setText(""+counter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    public void showSeats(){
+        myRef = database.getReference(String.valueOf(spinner2.getSelectedItem()));
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Boolean value = dataSnapshot.child("Seat 1").getValue(Boolean.class);
+                if(value.equals(true)){
+                    imageViewSeat1.setImageResource(R.drawable.seat_orange);
+                }else if(value.equals(false)){
+                    imageViewSeat1.setImageResource(R.drawable.seat_black);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        myRef = database.getReference(String.valueOf(spinner2.getSelectedItem()));
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Boolean value = dataSnapshot.child("Seat 2").getValue(Boolean.class);
+                if(value.equals(true)){
+                    imageViewSeat2.setImageResource(R.drawable.seat_orange);
+                }else if(value.equals(false)){
+                    imageViewSeat2.setImageResource(R.drawable.seat_black);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        myRef = database.getReference(String.valueOf(spinner2.getSelectedItem()));
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Boolean value = dataSnapshot.child("Seat 3").getValue(Boolean.class);
+                if(value.equals(true)){
+                    imageViewSeat3.setImageResource(R.drawable.seat_orange);
+                }else if(value.equals(false)){
+                    imageViewSeat3.setImageResource(R.drawable.seat_black);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        myRef = database.getReference(String.valueOf(spinner2.getSelectedItem()));
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Boolean value = dataSnapshot.child("Seat 4").getValue(Boolean.class);
+                if(value.equals(true)){
+                    imageViewSeat4.setImageResource(R.drawable.seat_orange);
+                }else if(value.equals(false)){
+                    imageViewSeat4.setImageResource(R.drawable.seat_black);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        myRef = database.getReference(String.valueOf(spinner2.getSelectedItem()));
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Boolean value = dataSnapshot.child("Seat 5").getValue(Boolean.class);
+                if(value.equals(true)){
+                    imageViewSeat5.setImageResource(R.drawable.seat_orange);
+                }else if(value.equals(false)){
+                    imageViewSeat5.setImageResource(R.drawable.seat_black);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        myRef = database.getReference(String.valueOf(spinner2.getSelectedItem()));
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Boolean value = dataSnapshot.child("Seat 6").getValue(Boolean.class);
+                if(value.equals(true)){
+                    imageViewSeat6.setImageResource(R.drawable.seat_orange);
+                }else if(value.equals(false)){
+                    imageViewSeat6.setImageResource(R.drawable.seat_black);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        myRef = database.getReference(String.valueOf(spinner2.getSelectedItem()));
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Boolean value = dataSnapshot.child("Seat 7").getValue(Boolean.class);
+                if(value.equals(true)){
+                    imageViewSeat7.setImageResource(R.drawable.seat_orange);
+                }else if(value.equals(false)){
+                    imageViewSeat7.setImageResource(R.drawable.seat_black);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        myRef = database.getReference(String.valueOf(spinner2.getSelectedItem()));
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Boolean value = dataSnapshot.child("Seat 8").getValue(Boolean.class);
+                if(value.equals(true)){
+                    imageViewSeat8.setImageResource(R.drawable.seat_orange);
+                }else if(value.equals(false)){
+                    imageViewSeat8.setImageResource(R.drawable.seat_black);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        myRef = database.getReference(String.valueOf(spinner2.getSelectedItem()));
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Boolean value = dataSnapshot.child("Seat 9").getValue(Boolean.class);
+                if(value.equals(true)){
+                    imageViewSeat9.setImageResource(R.drawable.seat_orange);
+                }else if(value.equals(false)){
+                    imageViewSeat9.setImageResource(R.drawable.seat_black);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        myRef = database.getReference(String.valueOf(spinner2.getSelectedItem()));
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Boolean value = dataSnapshot.child("Seat 10").getValue(Boolean.class);
+                if(value.equals(true)){
+                    imageViewSeat10.setImageResource(R.drawable.seat_orange);
+                }else if(value.equals(false)){
+                    imageViewSeat10.setImageResource(R.drawable.seat_black);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        myRef = database.getReference(String.valueOf(spinner2.getSelectedItem()));
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Boolean value = dataSnapshot.child("Seat 11").getValue(Boolean.class);
+                if(value.equals(true)){
+                    imageViewSeat11.setImageResource(R.drawable.seat_orange);
+                }else if(value.equals(false)){
+                    imageViewSeat11.setImageResource(R.drawable.seat_black);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        myRef = database.getReference(String.valueOf(spinner2.getSelectedItem()));
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Boolean value = dataSnapshot.child("Seat 12").getValue(Boolean.class);
+                if(value.equals(true)){
+                    imageViewSeat12.setImageResource(R.drawable.seat_orange);
+                }else if(value.equals(false)){
+                    imageViewSeat12.setImageResource(R.drawable.seat_black);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        myRef = database.getReference(String.valueOf(spinner2.getSelectedItem()));
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Boolean value = dataSnapshot.child("Seat 13").getValue(Boolean.class);
+                if(value.equals(true)){
+                    imageViewSeat13.setImageResource(R.drawable.seat_orange);
+                }else if(value.equals(false)){
+                    imageViewSeat13.setImageResource(R.drawable.seat_black);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        myRef = database.getReference(String.valueOf(spinner2.getSelectedItem()));
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Boolean value = dataSnapshot.child("Seat 14").getValue(Boolean.class);
+                if(value.equals(true)){
+                    imageViewSeat14.setImageResource(R.drawable.seat_orange);
+                }else if(value.equals(false)){
+                    imageViewSeat14.setImageResource(R.drawable.seat_black);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        myRef = database.getReference(String.valueOf(spinner2.getSelectedItem()));
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Boolean value = dataSnapshot.child("Seat 15").getValue(Boolean.class);
+                if(value.equals(true)){
+                    imageViewSeat15.setImageResource(R.drawable.seat_orange);
+                }else if(value.equals(false)){
+                    imageViewSeat15.setImageResource(R.drawable.seat_black);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        myRef = database.getReference(String.valueOf(spinner2.getSelectedItem()));
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Boolean value = dataSnapshot.child("Seat 16").getValue(Boolean.class);
+                if(value.equals(true)){
+                    imageViewSeat16.setImageResource(R.drawable.seat_orange);
+                }else if(value.equals(false)){
+                    imageViewSeat16.setImageResource(R.drawable.seat_black);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        myRef = database.getReference(String.valueOf(spinner2.getSelectedItem()));
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Boolean value = dataSnapshot.child("Seat 17").getValue(Boolean.class);
+                if(value.equals(true)){
+                    imageViewSeat17.setImageResource(R.drawable.seat_orange);
+                }else if(value.equals(false)){
+                    imageViewSeat17.setImageResource(R.drawable.seat_black);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        myRef = database.getReference(String.valueOf(spinner2.getSelectedItem()));
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Boolean value = dataSnapshot.child("Seat 18").getValue(Boolean.class);
+                if(value.equals(true)){
+                    imageViewSeat18.setImageResource(R.drawable.seat_orange);
+                }else if(value.equals(false)){
+                    imageViewSeat18.setImageResource(R.drawable.seat_black);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        myRef = database.getReference(String.valueOf(spinner2.getSelectedItem()));
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Boolean value = dataSnapshot.child("Seat 19").getValue(Boolean.class);
+                if(value.equals(true)){
+                    imageViewSeat19.setImageResource(R.drawable.seat_orange);
+                }else if(value.equals(false)){
+                    imageViewSeat19.setImageResource(R.drawable.seat_black);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        myRef = database.getReference(String.valueOf(spinner2.getSelectedItem()));
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Boolean value = dataSnapshot.child("Seat 20").getValue(Boolean.class);
+                if(value.equals(true)){
+                    imageViewSeat20.setImageResource(R.drawable.seat_orange);
+                }else if(value.equals(false)){
+                    imageViewSeat20.setImageResource(R.drawable.seat_black);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
         });
     }
 
