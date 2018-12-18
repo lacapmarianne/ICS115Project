@@ -15,7 +15,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
-
+    static String name;
+    static String number;
     private FirebaseAuth mAuth;
 
     @Override
@@ -24,6 +25,12 @@ public class LoginActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+    }
+    public static String getName(){
+        return name;
+    }
+    public static String getNumber(){
+        return number;
     }
 
     @Override
@@ -39,13 +46,13 @@ public class LoginActivity extends AppCompatActivity {
         userName = (EditText) findViewById(R.id.editTxtResName);
         userPass = (EditText) findViewById(R.id.editTxtBookNum);
 
-        String username = userName.getText().toString();
+        final String username = userName.getText().toString();
         String concat;
         concat = "@gmail.com";
 
         String finalString =  username + concat;
 
-        String password = userPass.getText().toString();
+        final String password = userPass.getText().toString();
         mAuth.signInWithEmailAndPassword(finalString, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
 
@@ -54,7 +61,8 @@ public class LoginActivity extends AppCompatActivity {
 
                             // Sign in Success
                             Log.d("4ITF", "signInWithUserName:success");
-
+                            name = username;
+                            number = password;
                             Intent s = new Intent(getBaseContext(), WelcomePageActivity.class);
                             startActivity(s);
 

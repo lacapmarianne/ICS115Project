@@ -1,5 +1,6 @@
 package com.ics115.project;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,8 +27,8 @@ public class SeatReservationActivity extends AppCompatActivity {
     private Spinner spinner2;
     private Button btnReserve;
     private TextView seats;
-    String seat_id;
-
+    static int reserved = 0;
+    boolean x;
     DatabaseReference myRef;
     FirebaseDatabase database;
 
@@ -39,6 +40,7 @@ public class SeatReservationActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        reserved = 0;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seat_reservation);
         seats = findViewById(R.id.totalSeats);
@@ -69,6 +71,9 @@ public class SeatReservationActivity extends AppCompatActivity {
             addListenerOnButton();
             checkNumOfSeats();
             showSeats();
+    }
+    public static int getReserved(){
+        return reserved;
     }
 
     // Add items into spinner dynamically
@@ -110,6 +115,7 @@ public class SeatReservationActivity extends AppCompatActivity {
             public void onClick(View v) {
                 checkNumOfSeats();
                 showSeats();
+
                 myRef = database.getReference(String.valueOf(spinner2.getSelectedItem()));
                 myRef.addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
                     @Override
@@ -118,11 +124,14 @@ public class SeatReservationActivity extends AppCompatActivity {
                         String status;
                         if(value.equals(false)){
                             dataSnapshot.child("Seat 1").getRef().setValue(true);
-
+                            reserved = reserved+1;
+                            x = true;
 
                         }else if(value.equals(true)){
                             dataSnapshot.child("Seat 1").getRef().setValue(false);
-
+                            if(reserved > 0 ||  x == true){
+                                reserved = reserved-1;
+                            }
                         }
 
                         if(value.equals(true)){
@@ -158,6 +167,7 @@ public class SeatReservationActivity extends AppCompatActivity {
                         String status;
                         if(value.equals(false)){
                             dataSnapshot.child("Seat 2").getRef().setValue(true);
+                            reserved = reserved+1;
                         }else if(value.equals(true)){
                             dataSnapshot.child("Seat 2").getRef().setValue(false);
                         }
@@ -193,6 +203,7 @@ public class SeatReservationActivity extends AppCompatActivity {
                         String status;
                         if(value.equals(false)){
                             dataSnapshot.child("Seat 3").getRef().setValue(true);
+                            reserved = reserved+1;
 
 
                         }else if(value.equals(true)){
@@ -231,6 +242,7 @@ public class SeatReservationActivity extends AppCompatActivity {
                         String status;
                         if(value.equals(false)){
                             dataSnapshot.child("Seat 4").getRef().setValue(true);
+                            reserved = reserved+1;
                         }else if(value.equals(true)){
                             dataSnapshot.child("Seat 4").getRef().setValue(false);
                         }
@@ -267,6 +279,7 @@ public class SeatReservationActivity extends AppCompatActivity {
                         String status;
                         if(value.equals(false)){
                             dataSnapshot.child("Seat 5").getRef().setValue(true);
+                            reserved = reserved+1;
                         }else if(value.equals(true)){
                             dataSnapshot.child("Seat 5").getRef().setValue(false);
                         }
@@ -303,6 +316,7 @@ public class SeatReservationActivity extends AppCompatActivity {
                         String status;
                         if(value.equals(false)){
                             dataSnapshot.child("Seat 6").getRef().setValue(true);
+                            reserved = reserved+1;
                         }else if(value.equals(true)){
                             dataSnapshot.child("Seat 6").getRef().setValue(false);
                         }
@@ -339,6 +353,7 @@ public class SeatReservationActivity extends AppCompatActivity {
                         String status;
                         if(value.equals(false)){
                             dataSnapshot.child("Seat 7").getRef().setValue(true);
+                            reserved = reserved+1;
                         }else if(value.equals(true)){
                             dataSnapshot.child("Seat 7").getRef().setValue(false);
                         }
@@ -375,6 +390,7 @@ public class SeatReservationActivity extends AppCompatActivity {
                         String status;
                         if(value.equals(false)){
                             dataSnapshot.child("Seat 8").getRef().setValue(true);
+                            reserved = reserved+1;
                         }else if(value.equals(true)){
                             dataSnapshot.child("Seat 8").getRef().setValue(false);
                         }
@@ -411,6 +427,7 @@ public class SeatReservationActivity extends AppCompatActivity {
                         String status;
                         if(value.equals(false)){
                             dataSnapshot.child("Seat 9").getRef().setValue(true);
+                            reserved = reserved+1;
                         }else if(value.equals(true)){
                             dataSnapshot.child("Seat 9").getRef().setValue(false);
                         }
@@ -446,6 +463,7 @@ public class SeatReservationActivity extends AppCompatActivity {
                         String status;
                         if(value.equals(false)){
                             dataSnapshot.child("Seat 10").getRef().setValue(true);
+                            reserved = reserved+1;
                         }else if(value.equals(true)){
                             dataSnapshot.child("Seat 10").getRef().setValue(false);
                         }
@@ -482,6 +500,7 @@ public class SeatReservationActivity extends AppCompatActivity {
                         String status;
                         if(value.equals(false)){
                             dataSnapshot.child("Seat 11").getRef().setValue(true);
+                            reserved = reserved+1;
                         }else if(value.equals(true)){
                             dataSnapshot.child("Seat 11").getRef().setValue(false);
                         }
@@ -518,6 +537,7 @@ public class SeatReservationActivity extends AppCompatActivity {
                         String status;
                         if(value.equals(false)){
                             dataSnapshot.child("Seat 12").getRef().setValue(true);
+                            reserved = reserved+1;
                         }else if(value.equals(true)){
                             dataSnapshot.child("Seat 12").getRef().setValue(false);
                         }
@@ -554,6 +574,7 @@ public class SeatReservationActivity extends AppCompatActivity {
                         String status;
                         if(value.equals(false)){
                             dataSnapshot.child("Seat 13").getRef().setValue(true);
+                            reserved = reserved+1;
                         }else if(value.equals(true)){
                             dataSnapshot.child("Seat 13").getRef().setValue(false);
                         }
@@ -590,6 +611,7 @@ public class SeatReservationActivity extends AppCompatActivity {
                         String status;
                         if(value.equals(false)){
                             dataSnapshot.child("Seat 14").getRef().setValue(true);
+                            reserved = reserved+1;
                         }else if(value.equals(true)){
                             dataSnapshot.child("Seat 14").getRef().setValue(false);
                         }
@@ -626,6 +648,7 @@ public class SeatReservationActivity extends AppCompatActivity {
                         String status;
                         if(value.equals(false)){
                             dataSnapshot.child("Seat 15").getRef().setValue(true);
+                            reserved = reserved+1;
                         }else if(value.equals(true)){
                             dataSnapshot.child("Seat 15").getRef().setValue(false);
                         }
@@ -662,6 +685,7 @@ public class SeatReservationActivity extends AppCompatActivity {
                         String status;
                         if(value.equals(false)){
                             dataSnapshot.child("Seat 16").getRef().setValue(true);
+                            reserved = reserved+1;
                         }else if(value.equals(true)){
                             dataSnapshot.child("Seat 16").getRef().setValue(false);
                         }
@@ -698,6 +722,7 @@ public class SeatReservationActivity extends AppCompatActivity {
                         String status;
                         if(value.equals(false)){
                             dataSnapshot.child("Seat 17").getRef().setValue(true);
+                            reserved = reserved+1;
                         }else if(value.equals(true)){
                             dataSnapshot.child("Seat 17").getRef().setValue(false);
                         }
@@ -734,6 +759,7 @@ public class SeatReservationActivity extends AppCompatActivity {
                         String status;
                         if(value.equals(false)){
                             dataSnapshot.child("Seat 18").getRef().setValue(true);
+                            reserved = reserved+1;
                         }else if(value.equals(true)){
                             dataSnapshot.child("Seat 18").getRef().setValue(false);
                         }
@@ -770,6 +796,7 @@ public class SeatReservationActivity extends AppCompatActivity {
                         String status;
                         if(value.equals(false)){
                             dataSnapshot.child("Seat 19").getRef().setValue(true);
+                            reserved = reserved+1;
                         }else if(value.equals(true)){
                             dataSnapshot.child("Seat 19").getRef().setValue(false);
                         }
@@ -806,6 +833,7 @@ public class SeatReservationActivity extends AppCompatActivity {
                         String status;
                         if(value.equals(false)){
                             dataSnapshot.child("Seat 20").getRef().setValue(true);
+                            reserved = reserved+1;
                         }else if(value.equals(true)){
                             dataSnapshot.child("Seat 20").getRef().setValue(false);
                         }
@@ -832,11 +860,9 @@ public class SeatReservationActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
+                Intent i = new Intent(SeatReservationActivity.this, ReservedSeatsActivity.class);
+                startActivity(i);
 
-
-                Toast.makeText(SeatReservationActivity.this,
-                                "\nYou've selected: "+ String.valueOf(spinner2.getSelectedItem()),
-                                Toast.LENGTH_SHORT).show();
             }
 
         });
